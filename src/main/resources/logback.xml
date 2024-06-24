@@ -1,0 +1,3 @@
+<!--logback.xml 在此处创建，Logback将自动读取并生效（很方便！），优先级高于 Logback 自带的默认配置-->
+<!--logback.xml 格式很自由，这么一行就足以正确读取-->
+<logger name="org.apache.flink.api.java.utils.PlanGenerator" level="INFO"/>
