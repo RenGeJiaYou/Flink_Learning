@@ -1,4 +1,4 @@
-package org.example;
+package org.example.quick_start_01;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
