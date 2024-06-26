@@ -1,4 +1,4 @@
-package org.example.quick_start_01;
+package org.example.Quick_Start_01;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.typeinfo.Types;
