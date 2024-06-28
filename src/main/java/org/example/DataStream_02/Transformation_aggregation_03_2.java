@@ -7,7 +7,7 @@ import org.apache.flink.util.Collector;
 import org.example.pojo.WaterSensor;
 
 /**
- * 转换算子
+ * 聚合算子，应该只用在含有有限个 key 的数据流上。
  *
  * @author Island_World
  */
@@ -20,32 +20,16 @@ public class Transformation_aggregation_03_2 {
         DataStreamSource<WaterSensor> stream = env.fromElements(
                 new WaterSensor("sensor_1", 1L, 1),
                 new WaterSensor("sensor_2", 2L, 2),
+                new WaterSensor("sensor_2", 3L, 3),
                 new WaterSensor("sensor_3", 3L, 3));
 
-        // 1 map
-        stream.map(s -> s.id).print("map function");
-
-        // 2 filter
-        stream.filter(s -> s.vc >= 2).print("filter function");
-
-        // 3 flatMap:如果输入数据的水位值是偶数，只打印id；如果输入数据的水位值是奇数，既打印ts又打印vc。
-        stream.flatMap(new FlatMapFunction<WaterSensor, String>() {
-            @Override
-            public void flatMap(WaterSensor value, Collector<String> out) throws Exception {
-                if (value.vc % 2 == 0) {
-                    out.collect(value.id);
-                } else {
-                    out.collect(value.ts.toString());
-                    out.collect(value.vc.toString());
-                }
-            }
-        }).print("flatMap function");
-
-        // 4 keyBy 是聚合前必须要做的操作，哈希指定的key进行分组
+        // 1 keyBy 是聚合前必须要做的操作，哈希指定的key进行分组
         // keyBy() 将 DataStream 转换为 KeyedStream，只有 KeyedStream 才能调用 reduce() 和 sum() 等聚合算子
         stream.keyBy(s->s.id)
-                .sum(2)
+                .max("vc")
                 .print("keyBy function");
+
+
 
         env.execute();
     }

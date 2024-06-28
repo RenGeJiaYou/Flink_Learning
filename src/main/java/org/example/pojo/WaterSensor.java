@@ -2,6 +2,7 @@ package org.example.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 水位传感器类
@@ -9,6 +10,7 @@ import lombok.Data;
  * @author Island_World
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class WaterSensor {
     /**
