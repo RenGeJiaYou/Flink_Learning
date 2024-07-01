@@ -12,7 +12,10 @@ import org.example.Functions.WaterSensorMapFunction;
 import org.example.pojo.WaterSensor;
 
 /**
- * 简单分流：调用 filter() 将一条 DataStream 拆分为多条。这种方式虽然简单，但同一份数据会被多次处理，效率低下。
+ * 旁路分流：调用 sideOutput() 将一条 DataStream 拆分为多条。这种方式只处理一次数据，效率高。
+ * 旁路输出数据流的元素的数据类型可以与上游敛据流不同，多个旁路输出数据流之间，数据类型也不必相同。
+ * 当使用旁路输出的时候，首先需要定义 OutputTag， OutputTas 是每一个下游分支的标识
+ * 定义好 OutputTag 之后，只有在特定的函数中才能使用旁路输出，例如 ProcessFunction、CoProcessFunction、KeyedProcessFunction 等
  *
  * @author Island_World
  */
@@ -25,7 +28,7 @@ public class SplitStream_side_output_06_2 {
         OutputTag<WaterSensor> s1 = new OutputTag<>("s1", Types.POJO(WaterSensor.class));
         OutputTag<WaterSensor> s2 = new OutputTag<>("s2", Types.POJO(WaterSensor.class));
 
-        source.process(new ProcessFunction<WaterSensor, WaterSensor>() {
+        SingleOutputStreamOperator<WaterSensor> ds = source.process(new ProcessFunction<WaterSensor, WaterSensor>() {
             @Override
             public void processElement(WaterSensor value, ProcessFunction<WaterSensor, WaterSensor>.Context ctx, Collector<WaterSensor> out) throws Exception {
                 if ("s1".equals(value.getId())) {
@@ -37,8 +40,28 @@ public class SplitStream_side_output_06_2 {
                     out.collect(value);
                 }
             }
-        })
+        });
+
+        ds.print("主流，非s1,s2的传感器");
+
+        ds.getSideOutput(s1).printToErr("s1传感器");
+        ds.getSideOutput(s2).printToErr("s2传感器");
 
         env.execute();
     }
 }
+/**
+ * socket 输入数据：
+ * s1,1,1
+ * s2,2,2
+ * s1,3,46
+ * s2,5,41
+ * s8,4,4
+
+ * 输出结果：
+ * s1传感器:4> WaterSensor(id=s1, ts=1, vc=1)
+ * s2传感器:5> WaterSensor(id=s2, ts=2, vc=2)
+ * s1传感器:6> WaterSensor(id=s1, ts=3, vc=46)
+ * s2传感器:7> WaterSensor(id=s2, ts=5, vc=41)
+ * 主流，非s1,s2的传感器:8> WaterSensor(id=s8, ts=4, vc=4)
+ * */
