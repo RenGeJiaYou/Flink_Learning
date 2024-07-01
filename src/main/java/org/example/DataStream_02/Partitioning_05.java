@@ -1,12 +1,7 @@
 package org.example.DataStream_02;
 
-import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.common.functions.RuntimeContext;
-import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
-import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.example.pojo.WaterSensor;
 
 /**
  * 物理分区：流式的一大堆数据如何分给某个算子的 n 个并行子任务？
@@ -14,7 +9,7 @@ import org.example.pojo.WaterSensor;
  * @author Island_World
  */
 
-public class Partitioning_06 {
+public class Partitioning_05 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
