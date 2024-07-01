@@ -1,13 +1,11 @@
 package org.example.DataStream_02;
 
-import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
-import org.example.Functions.MyFilterFunction;
 import org.example.Functions.WaterSensorMapFunction;
 import org.example.pojo.WaterSensor;
 

@@ -4,7 +4,8 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
- * 简单分流：调用 filter() 将一条 DataStream 拆分为多条。这种方式虽然简单，但同一份数据会被多次处理，效率低下。
+ * 简单分流：<p>
+ * 调用 filter() 将一条 DataStream 拆分为多条。这种方式虽然简单，但同一份数据会被多次处理，效率低下。
  *
  *
  * @author Island_World
