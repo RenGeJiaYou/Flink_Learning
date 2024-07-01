@@ -6,7 +6,6 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.example.Functions.MyFilterFunction;
 import org.example.pojo.WaterSensor;
 
 /**
@@ -18,7 +17,7 @@ import org.example.pojo.WaterSensor;
  * @author Island_World
  */
 
-public class UDF_Rich_Func_05 {
+public class UDF_rich_func_04_2 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 //        env.setParallelism(1);

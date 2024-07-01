@@ -1,6 +1,5 @@
 package org.example.DataStream_02;
 
-import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -13,7 +12,7 @@ import org.example.pojo.WaterSensor;
  * @author Island_World
  */
 
-public class UDF_04 {
+public class UDF_base_04_1 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         DataStreamSource<WaterSensor> stream = env.fromElements(
