@@ -1,4 +1,4 @@
-package org.example.DataStream_02;
+package org.example.DataStream_02.transformation;
 
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
@@ -11,7 +11,7 @@ import org.example.pojo.WaterSensor;
  * @author Island_World
  */
 
-public class Transformation_aggregation_minBy_03_3 {
+public class aggregation_minBy_3 {
     public static void main(String[] args) throws Exception {
         // 0 创建执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();

@@ -1,14 +1,6 @@
-package org.example.DataStream_02;
+package org.example.DataStream_02.source;
 
-import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.connector.file.src.FileSource;
-import org.apache.flink.connector.file.src.reader.TextLineFormat;
-import org.apache.flink.core.fs.Path;
-import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * 01
@@ -16,7 +8,7 @@ import java.util.List;
  * @author Island_World
  */
 
-public class Source_Operator_02 {
+public class Source_Operator {
     public static void main(String[] args) throws Exception {
         // 0 创建环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();

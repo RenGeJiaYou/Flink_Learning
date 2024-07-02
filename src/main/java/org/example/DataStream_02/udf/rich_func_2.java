@@ -1,4 +1,4 @@
-package org.example.DataStream_02;
+package org.example.DataStream_02.udf;
 
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.functions.RuntimeContext;
@@ -17,7 +17,7 @@ import org.example.pojo.WaterSensor;
  * @author Island_World
  */
 
-public class UDF_rich_func_04_2 {
+public class rich_func_2 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 //        env.setParallelism(1);

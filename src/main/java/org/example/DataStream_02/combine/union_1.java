@@ -1,9 +1,8 @@
-package org.example.DataStream_02;
+package org.example.DataStream_02.combine;
 
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.example.pojo.WaterSensor;
 
 /**
  * 基本合流操作<p>
@@ -13,7 +12,7 @@ import org.example.pojo.WaterSensor;
  * @author Island_World
  */
 
-public class MergeStream_union_07_1 {
+public class union_1 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);

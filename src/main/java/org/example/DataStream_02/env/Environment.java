@@ -1,4 +1,4 @@
-package org.example.DataStream_02;
+package org.example.DataStream_02.env;
 
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.configuration.Configuration;
@@ -11,7 +11,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  * @author Island_World
  */
 
-public class Environment_01 {
+public class Environment {
     public static void main(String[] args) {
         // 1 创建环境
         // getExecutionEnvironment() 在底层调用时传入了一个默认的配置信息

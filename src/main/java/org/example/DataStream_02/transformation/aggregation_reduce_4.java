@@ -1,4 +1,4 @@
-package org.example.DataStream_02;
+package org.example.DataStream_02.transformation;
 
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -12,7 +12,7 @@ import org.example.pojo.WaterSensor;
  * @author Island_World
  */
 
-public class Transformation_aggregation_reduce_03_4 {
+public class aggregation_reduce_4 {
     public static void main(String[] args) throws Exception {
         // 0 创建执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();

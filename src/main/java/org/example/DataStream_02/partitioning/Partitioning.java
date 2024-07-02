@@ -1,4 +1,4 @@
-package org.example.DataStream_02;
+package org.example.DataStream_02.partitioning;
 
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  * @author Island_World
  */
 
-public class Partitioning_05 {
+public class Partitioning {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 

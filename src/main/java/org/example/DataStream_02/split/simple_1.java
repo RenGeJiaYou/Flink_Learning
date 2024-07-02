@@ -1,4 +1,4 @@
-package org.example.DataStream_02;
+package org.example.DataStream_02.split;
 
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -11,7 +11,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  * @author Island_World
  */
 
-public class SplitStream_simple_06_1 {
+public class simple_1 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
