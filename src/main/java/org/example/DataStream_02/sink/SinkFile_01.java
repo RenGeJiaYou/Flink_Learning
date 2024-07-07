@@ -1,19 +1,13 @@
 package org.example.DataStream_02.sink;
 
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
-import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.connector.file.sink.FileSink;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.runtime.state.FunctionInitializationContext;
-import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.filesystem.OutputFileConfig;
 import org.apache.flink.streaming.api.functions.sink.filesystem.bucketassigners.DateTimeBucketAssigner;
 import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.DefaultRollingPolicy;
-import org.apache.flink.streaming.api.functions.source.datagen.DataGenerator;
-import org.apache.flink.streaming.api.functions.source.datagen.DataGeneratorSource;
-import org.example.pojo.WaterSensor;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -26,7 +20,7 @@ import java.time.ZoneId;
  * @author Island_World
  */
 
-public class SinkFile {
+public class SinkFile_01 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(2);
