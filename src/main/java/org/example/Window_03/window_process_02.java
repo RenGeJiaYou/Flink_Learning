@@ -1,6 +1,5 @@
 package org.example.Window_03;
 
-import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.datastream.WindowedStream;
@@ -8,7 +7,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
-import org.example.Functions.MyAggregateFunction;
+import org.example.Functions.MyWindowApplyFunction;
+import org.example.Functions.MyWindowProcessFunction;
 import org.example.Functions.WaterSensorMapFunction;
 import org.example.pojo.WaterSensor;
 import org.slf4j.Logger;
@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
  * @author Island_World
  */
 
-public class window_api_aggregation_01_2 {
-    private static final Logger log = LoggerFactory.getLogger(window_api_aggregation_01_2.class);
+public class window_process_02 {
+    private static final Logger log = LoggerFactory.getLogger(window_process_02.class);
 
     public static void main(String[] args) throws Exception {
         // 0. 数据准备
@@ -43,22 +43,18 @@ public class window_api_aggregation_01_2 {
                 .window(TumblingProcessingTimeWindows.of(Time.seconds(10)));
 
         windowedStream
-                .aggregate(new MyAggregateFunction())
+//                .apply(new MyWindowApplyFunction()) // 老写法
+                .process(new MyWindowProcessFunction())
                 .print();
 
         env.execute();
     }
 }
 /**
- * (按照 id 分组，key=s1 的数据走的是同一串窗口)
- * 输入数据：| 输出结果：
- * s1,1,1  | 创建createAccumulator()、调用add(),且当前累加值为:0, 当前来的值为1
- * s1,1,2  | 调用add(),且当前累加值为:1, 当前来的值为2
- * s1,1,3  | 调用add(),且当前累加值为:3, 当前来的值为3
- * s1,1,4  | 调用add(),且当前累加值为:6, 当前来的值为4、【窗口期 10s 到期】、调用getResult()、10
- * s1,1,5  | 创建createAccumulator()、调用add(),且当前累加值为:0, 当前来的值为5
- * s1,1,6  | 调用add(),且当前累加值为:5, 当前来的值为6
- * s1,1,7  | 调用add(),且当前累加值为:11, 当前来的值为7
- * s1,1,8  | 调用add(),且当前累加值为:18, 当前来的值为8、【窗口期 10s 到期】、调用getResult()、26
- * s1,1,9  | 创建 createAccumulator()、调用add(),且当前累加值为:0, 当前来的值为9
- * */
+ * 不同速率输入 s1,1,1
+ *
+ * 输出：
+ * key: s1 window: [start time:2024-07-08 20:14:40,end time:2024-07-08 20:14:50) count: 2
+ * key: s1 window: [start time:2024-07-08 20:14:50,end time:2024-07-08 20:15:00) count: 6
+ * key: s1 window: [start time:2024-07-08 20:15:00,end time:2024-07-08 20:15:10) count: 4
+ * key: s1 window: [start time:2024-07-08 20:15:10,end time:2024-07-08 20:15:20) count: 2*/
