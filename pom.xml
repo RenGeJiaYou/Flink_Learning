@@ -14,7 +14,7 @@
         <flink.version>1.14.6</flink.version>
         <scala.binary.version>2.12</scala.binary.version>
         <lombok.version>1.18.32</lombok.version>
-        <mysql.version>8.0.27</mysql.version>
+        <mysql.version>5.1.49</mysql.version>
     </properties>
 
     <dependencies>
@@ -36,6 +36,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+        </dependency>
+
+        <!-- MySQL Connector -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version> <!-- 使用适合你的MySQL版本的驱动程序 -->
         </dependency>
 
         <!-- Apache Flink dependencies -->
