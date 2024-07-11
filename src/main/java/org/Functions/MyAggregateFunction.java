@@ -1,7 +1,7 @@
-package org.example.Functions;
+package org.Functions;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.example.pojo.WaterSensor;
+import org.pojo.WaterSensor;
 
 /**
  * 窗口函数：增量聚合 aggregate 的自定义实现<p>

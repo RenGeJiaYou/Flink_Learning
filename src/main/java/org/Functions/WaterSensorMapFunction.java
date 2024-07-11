@@ -1,7 +1,7 @@
-package org.example.Functions;
+package org.Functions;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.example.pojo.WaterSensor;
+import org.pojo.WaterSensor;
 
 /**
  * @author Island_World

@@ -6,8 +6,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
-import org.example.Functions.WaterSensorMapFunction;
-import org.example.pojo.WaterSensor;
+import org.Functions.WaterSensorMapFunction;
+import org.pojo.WaterSensor;
 
 /**
  * 旁路分流：调用 sideOutput() 将一条 DataStream 拆分为多条。这种方式只处理一次数据，效率高。<p>

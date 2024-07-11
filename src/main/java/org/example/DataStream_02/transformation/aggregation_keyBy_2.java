@@ -3,7 +3,7 @@ package org.example.DataStream_02.transformation;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.example.pojo.WaterSensor;
+import org.pojo.WaterSensor;
 
 /**
  * 聚合算子，应该只用在含有有限个 key 的数据流上。

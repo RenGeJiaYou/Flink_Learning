@@ -1,8 +1,8 @@
-package org.example.Functions;
+package org.Functions;
 
 import lombok.AllArgsConstructor;
 import org.apache.flink.api.common.functions.FilterFunction;
-import org.example.pojo.WaterSensor;
+import org.pojo.WaterSensor;
 
 /**
  * 根据传参过滤出指定记录。

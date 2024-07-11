@@ -4,7 +4,7 @@ import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.example.pojo.WaterSensor;
+import org.pojo.WaterSensor;
 
 /**
  * 规约算子，每个 keyBy 分组总结 「1」 条数据出来，至于这条总结数据怎么来的，可以通过 ReduceFunction 接口自定义

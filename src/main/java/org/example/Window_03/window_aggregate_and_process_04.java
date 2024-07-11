@@ -10,10 +10,9 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTime
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-import org.example.Functions.MyAggregateFunction;
-import org.example.Functions.MyWindowProcessFunction;
-import org.example.Functions.WaterSensorMapFunction;
-import org.example.pojo.WaterSensor;
+import org.Functions.MyAggregateFunction;
+import org.Functions.WaterSensorMapFunction;
+import org.pojo.WaterSensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

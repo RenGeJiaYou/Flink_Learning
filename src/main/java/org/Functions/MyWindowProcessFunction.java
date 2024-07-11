@@ -1,13 +1,10 @@
-package org.example.Functions;
+package org.Functions;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
-import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-import org.example.pojo.WaterSensor;
-
-import java.text.DateFormat;
+import org.pojo.WaterSensor;
 
 /**
  * 全窗口函数，只在窗口最终触发时执行一次（比如只关心总数），拥有额外的上下文<br>

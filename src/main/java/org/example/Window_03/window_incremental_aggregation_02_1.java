@@ -8,8 +8,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.*;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
-import org.example.Functions.WaterSensorMapFunction;
-import org.example.pojo.WaterSensor;
+import org.Functions.WaterSensorMapFunction;
+import org.pojo.WaterSensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
