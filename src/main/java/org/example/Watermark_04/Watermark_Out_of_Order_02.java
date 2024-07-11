@@ -13,13 +13,15 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.pojo.WaterSensor;
 
+import java.time.Duration;
+
 /**
  * 有序流的内置水位线
  *
  * @author Island_World
  */
 
-public class WatermarkMono_01 {
+public class Watermark_Out_of_Order_02 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -28,18 +30,15 @@ public class WatermarkMono_01 {
                 .socketTextStream("localhost", 7777)
                 .map(new WaterSensorMapFunction());
 
-        // 1 定义 Watermark 策略, 有序流的内置水位线调用 forMonotonousTimestamps()
+        // 1 定义 Watermark 策略, 乱序流的内置水位线调用 forBoundedOutOfOrderness()
         WatermarkStrategy<WaterSensor> watermarkStrategy = WatermarkStrategy
-                // 1-1 指定 Watermark 生成：升序的 Watermark，没有等待时间
-                .<WaterSensor>forMonotonousTimestamps()
+                // 1-1 指定 Watermark 生成：升序的 Watermark，等待时间 3 秒：假设乱序到达的数据最大延迟时间是 3 秒
+                .<WaterSensor>forBoundedOutOfOrderness(Duration.ofSeconds(3))
                 // 1-2 指定时间戳分配器，从数据中提取
-                .withTimestampAssigner(new SerializableTimestampAssigner<WaterSensor>() {
-                    @Override
-                    public long extractTimestamp(WaterSensor ws, long timestamp) {
-                        // 返回的时间戳，单位 ms
-                        System.out.println("数据=" + ws + ",recordTs=" + timestamp);
-                        return ws.getTs() * 1000L;
-                    }
+                .withTimestampAssigner((SerializableTimestampAssigner<WaterSensor>) (ws, timestamp) -> {
+                    // 返回的时间戳，单位 ms
+                    System.out.println("乱序流水位线数据=" + ws + ",recordTs=" + timestamp);
+                    return ws.getTs() * 1000L;
                 });
 
         // 2 指定 Watermark 策略
