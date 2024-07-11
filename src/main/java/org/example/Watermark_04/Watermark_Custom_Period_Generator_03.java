@@ -16,12 +16,12 @@ import org.pojo.WaterSensor;
 import java.time.Duration;
 
 /**
- * 乱序流的内置水位线
+ * 周期性生成器一般是通过 onEvent() 观察判断输入的事件，而在 onPeriodicEmit() 里发出水位线。
  *
  * @author Island_World
  */
 
-public class Watermark_Out_of_Order_02 {
+public class Watermark_Custom_Period_Generator_03 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
