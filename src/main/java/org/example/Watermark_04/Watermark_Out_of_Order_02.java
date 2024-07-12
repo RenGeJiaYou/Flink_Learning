@@ -44,7 +44,7 @@ public class Watermark_Out_of_Order_02 {
         // 2 指定 Watermark 策略
         SingleOutputStreamOperator<WaterSensor> streamWithWatermark = stream.assignTimestampsAndWatermarks(watermarkStrategy);
 
-        // 3 对内置有序水位线的流 使用事件时间语义的窗口
+        // 3 对内置乱序水位线的流 使用事件时间语义的窗口
         streamWithWatermark.keyBy(WaterSensor::getId)
                 .window(TumblingEventTimeWindows.of(Time.seconds(10)))
                 .process(new ProcessWindowFunction<WaterSensor, String, String, TimeWindow>() {
