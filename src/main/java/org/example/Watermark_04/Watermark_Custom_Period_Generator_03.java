@@ -1,8 +1,11 @@
 package org.example.Watermark_04;
 
+import org.Functions.MyPeriodGenerator;
 import org.Functions.WaterSensorMapFunction;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
+import org.apache.flink.api.common.eventtime.WatermarkGenerator;
+import org.apache.flink.api.common.eventtime.WatermarkGeneratorSupplier;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -26,14 +29,17 @@ public class Watermark_Custom_Period_Generator_03 {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
+        // 设置水位线生成的周期为 200 ms
+        env.getConfig().setAutoWatermarkInterval(2000);
+
         SingleOutputStreamOperator<WaterSensor> stream = env
                 .socketTextStream("localhost", 7777)
                 .map(new WaterSensorMapFunction());
 
         // 1 定义 Watermark 策略, 乱序流的内置水位线调用 forBoundedOutOfOrderness()
         WatermarkStrategy<WaterSensor> watermarkStrategy = WatermarkStrategy
-                // 1-1 指定 Watermark 生成：升序的 Watermark，等待时间 3 秒：假设乱序到达的数据最大延迟时间是 3 秒
-                .<WaterSensor>forBoundedOutOfOrderness(Duration.ofSeconds(3))
+                // 1-1 指定 Watermark 自定义生成器
+                .<WaterSensor>forGenerator((WatermarkGeneratorSupplier<WaterSensor>) ctx -> new MyPeriodGenerator<>(3000L))
                 // 1-2 指定时间戳分配器，从数据中提取
                 .withTimestampAssigner((SerializableTimestampAssigner<WaterSensor>) (ws, timestamp) -> {
                     // 返回的时间戳，单位 ms
