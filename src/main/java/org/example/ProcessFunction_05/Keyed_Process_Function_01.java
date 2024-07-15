@@ -6,19 +6,18 @@ import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
-import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.util.Collector;
 import org.pojo.WaterSensor;
 
 import java.time.Duration;
 
 /**
- * sdz
+ * KeyedProcessFunction 的定时器使用
  *
  * @author Island_World
  */
 
-public class Keyed_Process_Timer_01 {
+public class Keyed_Process_Function_01 {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
