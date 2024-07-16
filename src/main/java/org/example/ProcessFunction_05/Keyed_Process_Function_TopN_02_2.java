@@ -21,6 +21,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 在 ProcessAllWindowFunction 中，
@@ -28,7 +29,7 @@ import java.util.List;
  * 2. 在全窗口函数中定义了一个 hashmap，遍历所有数据才能更新 hashmap，最后才算 可能会比较慢
  * 针对这两点，可以分别从两个方面进行优化：
  * 1. 使用 KeyedProcessFunction，将数据按照 vc 分区，避免将所有数据放在一个分区上
- * 2. 使用 增量聚合函数，不要等到最后才算
+ * 2. 使用 增量聚合函数，不要等到最后才算.这么一来，空间复杂度从O(n) -> O(1);而时间复杂度总是O(n) [因为不论是来一条计算一条 or 窗口触发时一并计算，都要做 n-1 次累加操作]
  *
  * @author Island_World
  */
@@ -75,7 +76,7 @@ public class Keyed_Process_Function_TopN_02_2 {
 
     /**
      * 按照 vc 进行聚合，一个窗口内有 n 个元素，将执行 n-1 次 add()
-     * */
+     */
     private static class VcCountAgg implements AggregateFunction<WaterSensor, Integer, Integer> {
         @Override
         public Integer createAccumulator() {
@@ -94,7 +95,7 @@ public class Keyed_Process_Function_TopN_02_2 {
 
         @Override
         public Integer merge(Integer a, Integer b) {
-            return 0;
+            return null;
         }
     }
 
@@ -108,6 +109,7 @@ public class Keyed_Process_Function_TopN_02_2 {
     private static class WindowResult extends ProcessWindowFunction<Integer, Tuple3<Integer, Integer, Long>, Integer, TimeWindow> {
         @Override
         public void process(Integer key, ProcessWindowFunction<Integer, Tuple3<Integer, Integer, Long>, Integer, TimeWindow>.Context ctx, Iterable<Integer> elements, Collector<Tuple3<Integer, Integer, Long>> out) throws Exception {
+            // 全窗口函数的输入是聚合函数的输出，即单独一个 count 值
             Integer count = elements.iterator().next();
             long windowEnd = ctx.window().getEnd();
             out.collect(Tuple3.of(key, count, windowEnd));
@@ -120,17 +122,70 @@ public class Keyed_Process_Function_TopN_02_2 {
      * String: 输出结果
      */
     private static class TopN extends KeyedProcessFunction<Long, Tuple3<Integer, Integer, Long>, String> {
+        /**
+         * 纯不同窗口的统计结果，key = windowEnd;value = list
+         */
+        private Map<Long, List<Tuple3<Integer, Integer, Long>>> dataListMap;
+        /**
+         * 要取的 TOP 数量
+         */
+        private int threshold;
+
         public TopN(int threshold) {
+            this.threshold = threshold;
+            dataListMap = new HashMap<>();
         }
 
         @Override
         public void processElement(Tuple3<Integer, Integer, Long> value, KeyedProcessFunction<Long, Tuple3<Integer, Integer, Long>, String>.Context ctx, Collector<String> out) throws Exception {
+            // processElement() 每次调用时，只有一条数据，要排序，得全部数据到齐才行。「全部数据」存在 类的实例的 dataListMap 中
+            // 1 将数据按 windowEnd 存到 HashMap 中
+            Long windowEnd = value.f2;
+            if (dataListMap.containsKey(windowEnd)) {
+                // 1.1 包含 vc，不是该 vc 的第一条，直接添加到 List 中
+                dataListMap.get(windowEnd).add(value);
+            } else {
+                // 1.2 不包含 vc，是该 vc 的第一条，需要初始化 List
+                List<Tuple3<Integer, Integer, Long>> dataList = new ArrayList<>();
+                dataList.add(value);
+                dataListMap.put(windowEnd, dataList);
 
+            }
+
+            // 2 注册一个定时器，windowEnd + 1ms 即可
+            // 同一个窗口范围，应该同时输出，只不过是一条一条调用processElement方法，只需要比当前数据时间戳延迟1ms即可
+            ctx.timerService().registerEventTimeTimer(windowEnd + 1);
         }
 
+        /**
+         * onTimer 的 timestamp 来自于 processElement() 中注册的定时器 windowEnd + 1
+         */
         @Override
         public void onTimer(long timestamp, KeyedProcessFunction<Long, Tuple3<Integer, Integer, Long>, String>.OnTimerContext ctx, Collector<String> out) throws Exception {
             super.onTimer(timestamp, ctx, out);
+            // 定时器逻辑：同一个窗口的所有计算结果到齐，进行排序、取前 N 个
+            Long windowEnd = ctx.getCurrentKey();
+            // 1. 排序
+            List<Tuple3<Integer, Integer, Long>> dataList = dataListMap.get(windowEnd);
+            dataList.sort((o1, o2) -> o2.f1 - o1.f1);
+
+            // 2. 取 TopN
+            StringBuilder outStr = new StringBuilder();
+
+            outStr.append("================================\n");
+            // 遍历 排序后的 List，取出前 threshold 个， 考虑可能List不够2个的情况  ==》 List中元素的个数 和 2 取最小值
+            for (int i = 0; i < Math.min(threshold, dataList.size()); i++) {
+                Tuple3<Integer, Integer, Long> vcCount = dataList.get(i);
+                outStr.append("Top" + (i + 1) + "\n");
+                outStr.append("vc=" + vcCount.f0 + "\n");
+                outStr.append("count=" + vcCount.f1 + "\n");
+                outStr.append("窗口结束时间=" + vcCount.f2 + "\n");
+                outStr.append("================================\n");
+            }
+
+            dataList.clear();
+
+            out.collect(outStr.toString());
         }
     }
 }
